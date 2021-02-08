@@ -2,7 +2,7 @@ export const dataToDiff = {
   column_1: [
     {
       title: 'Title 1',
-      start_time: '2021-01-01T12:00:00',
+      start_time: '2021-01-01T13:00:00',
       end_time: '2021-01-01T14:15:00'
     },
     {

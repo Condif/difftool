@@ -30,7 +30,54 @@
   cursor: pointer;
   background-color: rgb(177, 177, 177);
 }
-
+table {
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
 table td {
-    border: 1px solid black
+  border: 1px solid black;
+  text-align: center;
+}
+table td > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+td > div > p {
+
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.mark, .lessThanOneMinute, span {
+    background-color: rgba(255, 0, 85, 0.2);
+    border: 1px solid #cacaca
+}
+
+
+.emptyEntry {
+    background-color:  rgba(255, 0, 85, 0.329);
+}
+
+.material-icons  {
+    display: flex;
+    align-items: center;
+    height: 1.5rem;
+    margin-right: 3px;
+}
+
+.arrow_downward {
+    margin-left: 3px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.innerDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+    
+    
 }
