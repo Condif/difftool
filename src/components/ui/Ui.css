@@ -1,0 +1,36 @@
+.Ui {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  margin-top: 5rem;
+}
+
+.Ui h3 {
+  margin: 0;
+}
+
+.uiTopBar {
+  display: flex;
+  align-items: center;
+  height: 1.2rem;
+  justify-content: space-between;
+}
+
+.topBarRight {
+  display: flex;
+}
+
+.topBarRight button {
+  margin-left: 0.5rem;
+  background-color: white;
+  border: #cacaca solid 1.5px;
+}
+
+.topBarRight button:hover {
+  cursor: pointer;
+  background-color: rgb(177, 177, 177);
+}
+
+table td {
+    border: 1px solid black
+}
