@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Ui.css";
 import { dataToDiff } from "../../diff_data";
+import EditAddRow from "../modals/EditAddRow";
+import ViewDiffs from "../modals/ViewDiffs";
 
 const Ui = () => {
   const [data, setData] = useState([]);
+  const [isOpen, setIsOpen] = useState("");
 
   useEffect(() => {
     setData(dataToDiff);
   }, []);
+
 
   const renderTable = () => {
     return data.column_1.map((item, index) => {
@@ -41,13 +45,14 @@ const Ui = () => {
                 </p>
 
                 <div className="innerDiv">
-                  {compareTimes(
-                    data.column_1[index].end_time,
-                    data.column_2[index].start_time
-                  ) > 0 ? (
+                  {data.column_2[index + 1] &&
+                  compareTimes(
+                    //time1 - time2
+                    data.column_2[index].end_time,
+                    data.column_2[index + 1].start_time
+                  ) > 1 ? (
                     <span className="material-icons">arrow_upward</span>
                   ) : null}
-
                   <p
                     className={
                       compareTimes(
@@ -74,18 +79,24 @@ const Ui = () => {
                     {" "}
                     {convertDateToHourMinute(data.column_2[index].end_time)}
                   </p>
-                  { compareTimes(
-                    data.column_2[index].start_time,
-                    data.column_2[index].end_time
-                  ) < 5 ? (
-                    <span className="material-icons arrow_forward">arrow_forward</span>
-                  ) : 
-                  compareTimes(
-                    data.column_1[index].end_time,
+                  {compareTimes(
+                    data.column_2[index].end_time,
                     data.column_2[index].start_time
-                  ) > 0 ? (
-                    <span className="material-icons arrow_downward">arrow_downward</span>
-                  ) : null}
+                  ) < 5 && (
+                    <span className="material-icons arrow_forward">
+                      arrow_forward
+                    </span>
+                  )}{" "}
+                  {data.column_2[index - 1]
+                    ? compareTimes(
+                        data.column_2[index - 1].end_time,
+                        data.column_2[index].start_time
+                      ) > 0 && (
+                        <span className="material-icons arrow_downward">
+                          arrow_downward
+                        </span>
+                      )
+                    : null}
                 </div>
               </div>
             </td>
@@ -106,22 +117,28 @@ const Ui = () => {
   };
 
   const compareTimes = (time1, time2) => {
-    const diff = Math.abs((new Date(time1) - new Date(time2)) / 1000 / 60);
+    const diff = (new Date(time1) - new Date(time2)) / 1000 / 60;
     return diff;
   };
+
   return (
     <div className="Ui">
+      {isOpen === "edit_add_row" && <EditAddRow compareTimes={compareTimes} data={data} setIsOpen={setIsOpen} setData={setData}/>}
+      {isOpen === "view_diffs" && <ViewDiffs />}
       <h3>{data.title}</h3>
       <div className="uiTopBar">
         <h4>{data.date}</h4>
         <div className="topBarRight">
           <button>Discard Changes</button>
-          <button> View Diffs</button>
+          <button onClick={() => setIsOpen("view_diffs")}> View Diffs</button>
         </div>
       </div>
       <table id="data">
         {data.length !== 0 && <tbody>{renderTable()}</tbody>}
       </table>
+      <div className="uiBottomBar">
+        <button onClick={() => setIsOpen("edit_add_row")}>Add row +</button>
+      </div>
     </div>
   );
 };

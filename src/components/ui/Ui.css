@@ -16,17 +16,29 @@
   justify-content: space-between;
 }
 
+.uiBottomBar {
+  display: flex;
+  align-items: center;
+  height: 1.2rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.uiBottombar button {
+  display: flex;
+}
+
 .topBarRight {
   display: flex;
 }
 
-.topBarRight button {
+.Ui button {
   margin-left: 0.5rem;
   background-color: white;
   border: #cacaca solid 1.5px;
 }
 
-.topBarRight button:hover {
+button:hover {
   cursor: pointer;
   background-color: rgb(177, 177, 177);
 }

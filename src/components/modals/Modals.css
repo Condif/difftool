@@ -1,0 +1,93 @@
+.EditAddRow {
+  z-index: 1;
+  border: 1px solid black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(128, 128, 128, 0.568);
+}
+
+.modalContent {
+    width: 40%;
+    height: 33%;
+    border: #cacaca solid 2.5px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 3rem 0 1rem 0
+}
+
+.titleContainer input { 
+  border: none;
+  border-bottom: 1px solid black;
+  
+}
+
+form input:focus {
+  outline: none;
+}
+
+form input {
+  margin: 0.5rem 0 0.5rem 0
+}
+
+
+.startEndContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.startEndContainer input{
+  width: 60%;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.innerStartEnd {
+  display: flex;
+  flex-direction: column;
+}
+
+.modalButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+form button {
+  display: flex;
+  border: #cacaca solid 1.5px;
+  width: 4rem;
+  justify-content: center;
+}
+
+.closeModal {
+  height: 1rem;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.closeModal button { 
+  border: none;
+  font-size: 1.2rem;
+}
