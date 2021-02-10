@@ -83,7 +83,7 @@ const Ui = () => {
                   </p>
                 </div>
                 <div className="leftDownArrowDiv">
-                  <div className="arrowForwardDownwardDiv" >
+                  <div className="arrowForwardDownwardDiv">
                     {compareTimes(
                       data.column_2[index].end_time,
                       data.column_2[index].start_time
@@ -93,7 +93,7 @@ const Ui = () => {
                       </span>
                     )}{" "}
                   </div>
-                  <div className="arrowForwardDownwardDiv" >
+                  <div className="arrowForwardDownwardDiv">
                     {data.column_2[index - 1]
                       ? compareTimes(
                           data.column_2[index - 1].end_time,
@@ -105,7 +105,7 @@ const Ui = () => {
                         )
                       : null}
                   </div>
-                  </div>
+                </div>
                 <div className="rightTableContent">
                   <div className="editContainer">
                     <span
@@ -156,6 +156,11 @@ const Ui = () => {
     setData(newData);
   };
 
+  const discard = () => {
+    window.location.reload();
+    return false;
+  };
+
   return (
     <div className="Ui">
       {isOpen === "edit_add_row" && (
@@ -171,7 +176,7 @@ const Ui = () => {
       <div className="uiTopBar">
         <h4>{data.date}</h4>
         <div className="topBarRight">
-          <button>Discard Changes</button>
+          <button onClick={discard}>Discard Changes</button>
           <button onClick={() => setIsOpen("view_diffs")}> View Diffs</button>
         </div>
       </div>
