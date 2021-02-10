@@ -82,25 +82,31 @@ const Ui = () => {
                     {convertDateToHourMinute(data.column_2[index].end_time)}
                   </p>
                 </div>
+                <div className="leftDownArrowDiv">
+                  <div className="arrowForwardDownwardDiv" >
+                    {compareTimes(
+                      data.column_2[index].end_time,
+                      data.column_2[index].start_time
+                    ) < 5 && (
+                      <span className="material-icons arrow_forward">
+                        arrow_forward
+                      </span>
+                    )}{" "}
+                  </div>
+                  <div className="arrowForwardDownwardDiv" >
+                    {data.column_2[index - 1]
+                      ? compareTimes(
+                          data.column_2[index - 1].end_time,
+                          data.column_2[index].start_time
+                        ) > 0 && (
+                          <span className="material-icons arrow_downward">
+                            arrow_downward
+                          </span>
+                        )
+                      : null}
+                  </div>
+                  </div>
                 <div className="rightTableContent">
-                  {compareTimes(
-                    data.column_2[index].end_time,
-                    data.column_2[index].start_time
-                  ) < 5 && (
-                    <span className="material-icons arrow_forward">
-                      arrow_forward
-                    </span>
-                  )}{" "}
-                  {data.column_2[index - 1]
-                    ? compareTimes(
-                        data.column_2[index - 1].end_time,
-                        data.column_2[index].start_time
-                      ) > 0 && (
-                        <span className="material-icons arrow_downward">
-                          arrow_downward
-                        </span>
-                      )
-                    : null}
                   <div className="editContainer">
                     <span
                       type="button"

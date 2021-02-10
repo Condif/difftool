@@ -97,9 +97,8 @@ td > div > p {
 .innerDiv {
     display: flex;
     align-items: center;
-    justify-self: start;
+    justify-content: center;
     width: 6rem; 
-    margin-left: 2rem;
 }
 
 .material-icons .mode_edit  {
@@ -112,6 +111,14 @@ td > div > p {
 }
 
 .upwardArrowDiv {
-  width: 28px;
-  margin-left: 8rem;
+  width: 32px;
+}
+
+.leftDownArrowDiv {
+  width: 56px;
+  background-color: white;
+}
+
+.arrowForwardDownwardDiv {
+  width: 32px;
 }
