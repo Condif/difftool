@@ -122,3 +122,12 @@ td > div > p {
 .arrowForwardDownwardDiv {
   width: 32px;
 }
+
+.titleDiv {
+  width: 10rem;
+  justify-content: center;
+}
+
+.titleDiv .pDiv {
+  display: inline-block
+}

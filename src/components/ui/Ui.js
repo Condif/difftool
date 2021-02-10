@@ -21,18 +21,16 @@ const Ui = () => {
   };
 
   const renderTable = () => {
-    console.log(columnToRender().length);
-    console.log("data column1 column2" + data.column_1 + data.column_2);
     return columnToRender().map((item, index) => {
       return (
         <tr id={index} key={index}>
           {data.column_1[index] ? (
             <td>
               <div className="tableContent">
-                <p>{data.column_1[index]?.title}</p>
+                <p>{data.column_1[index].title}</p>
                 <p>
-                  {convertDateToHourMinute(data.column_1[index]?.start_time)} -{" "}
-                  {convertDateToHourMinute(data.column_1[index]?.end_time)}
+                  {convertDateToHourMinute(data.column_1[index].start_time)} -{" "}
+                  {convertDateToHourMinute(data.column_1[index].end_time)}
                 </p>
               </div>
             </td>
@@ -42,20 +40,24 @@ const Ui = () => {
           {data.column_2[index] ? (
             <td>
               <div className="tableContent">
-                {data.column_1[index] ? (
-                  <p
-                    className={
-                      data.column_2[index]?.title.toString() !==
-                      data.column_1[index]?.title.toString()
-                        ? "mark"
-                        : null
-                    }
-                  >
-                    {data.column_2[index]?.title}
-                  </p>
-                ) : (
-                  <p>{data.column_2[index]}</p>
-                )}
+                <div className="titleDiv">
+                  <div className="pDiv">
+                    {data.column_1[index] ? (
+                      <p
+                        className={
+                          data.column_2[index]?.title.toString() !==
+                          data.column_1[index]?.title.toString()
+                            ? "mark"
+                            : null
+                        }
+                      >
+                        {data.column_2[index]?.title}
+                      </p>
+                    ) : (
+                      <p>{data.column_2[index].title}</p>
+                    )}
+                  </div>
+                </div>
                 <div className="upwardArrowDiv">
                   {data.column_2[index + 1] &&
                   compareTimes(
@@ -92,8 +94,8 @@ const Ui = () => {
                     <p
                       className={
                         compareTimes(
-                          data.column_1[index]?.end_time,
-                          data.column_2[index]?.end_time
+                          data.column_1[index].end_time,
+                          data.column_2[index].end_time
                         ) > 1
                           ? "lessThanOneMinute"
                           : null
@@ -113,25 +115,24 @@ const Ui = () => {
                 <div className="leftDownArrowDiv">
                   <div className="arrowForwardDownwardDiv">
                     {compareTimes(
-                      data.column_2[index]?.end_time,
-                      data.column_2[index]?.start_time
+                      data.column_2[index].end_time,
+                      data.column_2[index].start_time
                     ) < 5 && (
                       <span className="material-icons arrow_forward">
                         arrow_forward
                       </span>
-                    )}{" "}
+                    )}
                   </div>
                   <div className="arrowForwardDownwardDiv">
-                    {data.column_2[index - 1]
-                      ? compareTimes(
-                          data.column_2[index - 1]?.end_time,
-                          data.column_2[index]?.start_time
-                        ) > 0 && (
-                          <span className="material-icons arrow_downward">
-                            arrow_downward
-                          </span>
-                        )
-                      : null}
+                    {compareTimes(
+                      //? to deal with index 0 - 1 not existing
+                      data.column_2[index - 1]?.end_time,
+                      data.column_2[index].start_time
+                    ) > 0 && (
+                      <span className="material-icons arrow_downward">
+                        arrow_downward
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="rightTableContent">
@@ -174,7 +175,7 @@ const Ui = () => {
   };
 
   const compareTimes = (time1, time2) => {
-    if(!time1 || !time2) return
+    if (!time1 || !time2) return;
     const diff = (new Date(time1) - new Date(time2)) / 1000 / 60;
     return diff;
   };
