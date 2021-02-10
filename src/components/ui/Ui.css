@@ -52,7 +52,6 @@ table td {
 }
 table td > div {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -62,7 +61,7 @@ td > div > p {
   margin-right: 1rem;
 }
 
-.mark, .lessThanOneMinute, span {
+.mark, .lessThanOneMinute, .arrow_downward, .arrow_forward, .arrow_upward {
     background-color: rgba(255, 0, 85, 0.2);
     border: 1px solid #cacaca
 }
@@ -79,17 +78,40 @@ td > div > p {
     margin-right: 3px;
 }
 
-.arrow_downward {
+.arrow_downward, .arrow_forward {
     margin-left: 3px;
-    display: flex;
-    justify-content: flex-end;
+}
+
+.tableContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rightTableContent {
+  display: flex;
+  align-items: center;
+  width: 120px;
+  justify-content: flex-end;
 }
 
 .innerDiv {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 40%;
-    
-    
+    justify-self: start;
+    width: 6rem; 
+    margin-left: 2rem;
+}
+
+.material-icons .mode_edit  {
+  background: white !important;
+}
+
+.mode_edit:hover, .delete:hover {
+  cursor: pointer;
+  background-color: rgb(177, 177, 177);
+}
+
+.upwardArrowDiv {
+  width: 28px;
+  margin-left: 8rem;
 }

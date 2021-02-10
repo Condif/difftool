@@ -12,14 +12,13 @@ const Ui = () => {
     setData(dataToDiff);
   }, []);
 
-
   const renderTable = () => {
     return data.column_1.map((item, index) => {
       return (
         <tr id={index} key={index}>
           {data.column_1[index] ? (
             <td>
-              <div>
+              <div className="tableContent">
                 <p>{data.column_1[index].title}</p>
                 <p>
                   {convertDateToHourMinute(data.column_1[index].start_time)} -{" "}
@@ -32,7 +31,7 @@ const Ui = () => {
           )}
           {data.column_2[index] ? (
             <td>
-              <div>
+              <div className="tableContent">
                 <p
                   className={
                     data.column_2[index].title.toString() !==
@@ -43,16 +42,19 @@ const Ui = () => {
                 >
                   {data.column_2[index].title}
                 </p>
-
-                <div className="innerDiv">
+                <div className="upwardArrowDiv">
                   {data.column_2[index + 1] &&
                   compareTimes(
                     //time1 - time2
                     data.column_2[index].end_time,
                     data.column_2[index + 1].start_time
                   ) > 1 ? (
-                    <span className="material-icons">arrow_upward</span>
+                    <span className="material-icons arrow_upward">
+                      arrow_upward
+                    </span>
                   ) : null}
+                </div>
+                <div className="innerDiv">
                   <p
                     className={
                       compareTimes(
@@ -79,6 +81,8 @@ const Ui = () => {
                     {" "}
                     {convertDateToHourMinute(data.column_2[index].end_time)}
                   </p>
+                </div>
+                <div className="rightTableContent">
                   {compareTimes(
                     data.column_2[index].end_time,
                     data.column_2[index].start_time
@@ -97,6 +101,24 @@ const Ui = () => {
                         </span>
                       )
                     : null}
+                  <div className="editContainer">
+                    <span
+                      type="button"
+                      onClick={() => setIsOpen("edit_add_row")}
+                      className="material-icons mode_edit"
+                    >
+                      mode_edit
+                    </span>
+                  </div>
+                  <div className="editContainer">
+                    <span
+                      type="button"
+                      onClick={() => deleteRow(index)}
+                      className="material-icons delete"
+                    >
+                      delete
+                    </span>
+                  </div>
                 </div>
               </div>
             </td>
@@ -121,9 +143,23 @@ const Ui = () => {
     return diff;
   };
 
+  const deleteRow = (index) => {
+    const newData = { ...data };
+
+    newData.column_2.splice(index, 1);
+    setData(newData);
+  };
+
   return (
     <div className="Ui">
-      {isOpen === "edit_add_row" && <EditAddRow compareTimes={compareTimes} data={data} setIsOpen={setIsOpen} setData={setData}/>}
+      {isOpen === "edit_add_row" && (
+        <EditAddRow
+          compareTimes={compareTimes}
+          data={data}
+          setIsOpen={setIsOpen}
+          setData={setData}
+        />
+      )}
       {isOpen === "view_diffs" && <ViewDiffs />}
       <h3>{data.title}</h3>
       <div className="uiTopBar">
