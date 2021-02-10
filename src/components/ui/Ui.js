@@ -7,6 +7,7 @@ import ViewDiffs from "../modals/ViewDiffs";
 const Ui = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState("");
+  // const [dataErrorIndexes, setDataErrorIndexes] = useState([]);
 
   useEffect(() => {
     setData(dataToDiff);
@@ -64,11 +65,13 @@ const Ui = () => {
                     //time1 - time2
                     data.column_2[index].end_time,
                     data.column_2[index + 1].start_time
-                  ) > 1 ? (
-                    <span className="material-icons arrow_upward">
-                      arrow_upward
-                    </span>
-                  ) : null}
+                  ) > 1
+                    ?  (
+                        <span className="material-icons arrow_upward">
+                          arrow_upward
+                        </span>
+                      )
+                    : null}
                 </div>
                 <div className="innerDiv">
                   {data.column_1[index] ? (
@@ -174,6 +177,14 @@ const Ui = () => {
     });
   };
 
+  // const handleSetDataErrorIndexes = (index) => {
+  //   console.log(dataErrorIndexes);
+  //   const newIndexList = dataErrorIndexes;
+  //   console.log(newIndexList);
+  //   newIndexList.push(index);
+  //   setDataErrorIndexes(newIndexList);
+  // };
+
   const compareTimes = (time1, time2) => {
     if (!time1 || !time2) return;
     const diff = (new Date(time1) - new Date(time2)) / 1000 / 60;
@@ -202,7 +213,7 @@ const Ui = () => {
           setData={setData}
         />
       )}
-      {isOpen === "view_diffs" && <ViewDiffs setIsOpen={setIsOpen} />}
+      {isOpen === "view_diffs" && <ViewDiffs setIsOpen={setIsOpen} columnToRender={columnToRender} data={data} compareTimes={compareTimes} convertDateToHourMinute={convertDateToHourMinute} />}
       <h3>{data.title}</h3>
       <div className="uiTopBar">
         <h4>{data.date}</h4>
