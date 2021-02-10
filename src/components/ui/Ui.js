@@ -12,17 +12,27 @@ const Ui = () => {
     setData(dataToDiff);
   }, []);
 
+  const columnToRender = () => {
+    if (data.column_1.length >= data.column_2.length) {
+      return data.column_1;
+    } else {
+      return data.column_2;
+    }
+  };
+
   const renderTable = () => {
-    return data.column_1.map((item, index) => {
+    console.log(columnToRender().length);
+    console.log("data column1 column2" + data.column_1 + data.column_2);
+    return columnToRender().map((item, index) => {
       return (
         <tr id={index} key={index}>
           {data.column_1[index] ? (
             <td>
               <div className="tableContent">
-                <p>{data.column_1[index].title}</p>
+                <p>{data.column_1[index]?.title}</p>
                 <p>
-                  {convertDateToHourMinute(data.column_1[index].start_time)} -{" "}
-                  {convertDateToHourMinute(data.column_1[index].end_time)}
+                  {convertDateToHourMinute(data.column_1[index]?.start_time)} -{" "}
+                  {convertDateToHourMinute(data.column_1[index]?.end_time)}
                 </p>
               </div>
             </td>
@@ -32,16 +42,20 @@ const Ui = () => {
           {data.column_2[index] ? (
             <td>
               <div className="tableContent">
-                <p
-                  className={
-                    data.column_2[index].title.toString() !==
-                    data.column_1[index].title.toString()
-                      ? "mark"
-                      : null
-                  }
-                >
-                  {data.column_2[index].title}
-                </p>
+                {data.column_1[index] ? (
+                  <p
+                    className={
+                      data.column_2[index]?.title.toString() !==
+                      data.column_1[index]?.title.toString()
+                        ? "mark"
+                        : null
+                    }
+                  >
+                    {data.column_2[index]?.title}
+                  </p>
+                ) : (
+                  <p>{data.column_2[index]}</p>
+                )}
                 <div className="upwardArrowDiv">
                   {data.column_2[index + 1] &&
                   compareTimes(
@@ -55,38 +69,52 @@ const Ui = () => {
                   ) : null}
                 </div>
                 <div className="innerDiv">
-                  <p
-                    className={
-                      compareTimes(
-                        data.column_1[index].start_time,
-                        data.column_2[index].start_time
-                      ) > 1
-                        ? "lessThanOneMinute"
-                        : null
-                    }
-                  >
-                    {convertDateToHourMinute(data.column_2[index].start_time)}
-                  </p>
+                  {data.column_1[index] ? (
+                    <p
+                      className={
+                        compareTimes(
+                          data.column_1[index].start_time,
+                          data.column_2[index].start_time
+                        ) > 1
+                          ? "lessThanOneMinute"
+                          : null
+                      }
+                    >
+                      {convertDateToHourMinute(data.column_2[index].start_time)}
+                    </p>
+                  ) : (
+                    <p>
+                      {convertDateToHourMinute(data.column_2[index].start_time)}
+                    </p>
+                  )}
                   <p>-</p>
-                  <p
-                    className={
-                      compareTimes(
-                        data.column_1[index].end_time,
-                        data.column_2[index].end_time
-                      ) > 1
-                        ? "lessThanOneMinute"
-                        : null
-                    }
-                  >
-                    {" "}
-                    {convertDateToHourMinute(data.column_2[index].end_time)}
-                  </p>
+                  {data.column_1[index] ? (
+                    <p
+                      className={
+                        compareTimes(
+                          data.column_1[index]?.end_time,
+                          data.column_2[index]?.end_time
+                        ) > 1
+                          ? "lessThanOneMinute"
+                          : null
+                      }
+                    >
+                      {" "}
+                      {convertDateToHourMinute(data.column_2[index].end_time)}
+                    </p>
+                  ) : (
+                    <p>
+                      {convertDateToHourMinute(
+                        data.column_2[index]?.start_time
+                      )}
+                    </p>
+                  )}
                 </div>
                 <div className="leftDownArrowDiv">
                   <div className="arrowForwardDownwardDiv">
                     {compareTimes(
-                      data.column_2[index].end_time,
-                      data.column_2[index].start_time
+                      data.column_2[index]?.end_time,
+                      data.column_2[index]?.start_time
                     ) < 5 && (
                       <span className="material-icons arrow_forward">
                         arrow_forward
@@ -96,8 +124,8 @@ const Ui = () => {
                   <div className="arrowForwardDownwardDiv">
                     {data.column_2[index - 1]
                       ? compareTimes(
-                          data.column_2[index - 1].end_time,
-                          data.column_2[index].start_time
+                          data.column_2[index - 1]?.end_time,
+                          data.column_2[index]?.start_time
                         ) > 0 && (
                           <span className="material-icons arrow_downward">
                             arrow_downward
@@ -137,6 +165,7 @@ const Ui = () => {
   };
 
   const convertDateToHourMinute = (time) => {
+    if (!time) return;
     const date = new Date(time);
     return date.toLocaleTimeString(navigator.language, {
       hour: "2-digit",
@@ -145,6 +174,7 @@ const Ui = () => {
   };
 
   const compareTimes = (time1, time2) => {
+    if(!time1 || !time2) return
     const diff = (new Date(time1) - new Date(time2)) / 1000 / 60;
     return diff;
   };
@@ -171,7 +201,7 @@ const Ui = () => {
           setData={setData}
         />
       )}
-      {isOpen === "view_diffs" && <ViewDiffs />}
+      {isOpen === "view_diffs" && <ViewDiffs setIsOpen={setIsOpen} />}
       <h3>{data.title}</h3>
       <div className="uiTopBar">
         <h4>{data.date}</h4>

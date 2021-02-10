@@ -1,4 +1,4 @@
-.EditAddRow {
+.EditAddRow, .ViewDiffs {
   z-index: 1;
   border: 1px solid black;
   position: fixed;
@@ -22,10 +22,11 @@
     justify-content: center;
 }
 
-form {
+form, .innerDiffContainer {
   display: flex;
   flex-direction: column;
   width: 80%;
+  border: solid black 1px
 }
 
 .titleContainer {
