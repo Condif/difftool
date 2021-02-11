@@ -16,7 +16,7 @@
 
 .modalContent {
   width: 40%;
-  height: 16rem;
+  height: 18rem;
   border: #cacaca solid 2.5px;
   background-color: white;
   display: flex;
@@ -30,13 +30,21 @@
   display: flex;
   justify-content: center;
 }
+.startTimeHh, .startTimeMm, .endTimeHh, .endTimeMm {
+  background-color: red;
+}
 
-form,
 .innerDiffContainer {
   display: flex;
   flex-direction: column;
   width: 80%;
   margin-top: 3rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
 }
 
 .titleContainer {
@@ -67,9 +75,20 @@ form input {
 }
 
 .startEndContainer input {
-  width: 60%;
+  width: 1rem;
   border: none;
   border-bottom: 1px solid black;
+}
+
+.dateInputContainer {
+  display: flex;
+}
+.dateInputContainer div{
+  width: 2rem;
+}
+
+.dateInputContainer p {
+  font-size: 0.5rem;
 }
 
 .innerStartEnd {
