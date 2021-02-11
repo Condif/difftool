@@ -203,15 +203,18 @@ const Ui = () => {
   };
 
   const deleteRow = (index) => {
+    //Även om newData är en kopia av data får man inte pusha till nestat 
+    // objekt i den arrayen utan man måste skapa en kopia som man pushar till eftersom den har en referens till originella data i state.
     const newData = { ...data };
+    const col_2 = [...newData.column_2]
 
-    newData.column_2.splice(index, 1);
+    col_2.splice(index, 1);
+    newData.column_2 = col_2
     setData(newData);
   };
 
   const discard = () => {
-    window.location.reload();
-    return false;
+    setData(dataToDiff)
   };
 
   return (

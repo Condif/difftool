@@ -26,21 +26,39 @@ const EditAddRow = (props) => {
     },
   });
   const checkError = () => {
-    if(inputData.title.error === true || inputData.start_time_hh.error === true || inputData.start_time_mm.error === true || inputData.end_time_hh.error === true || inputData.end_time_mm.error === true
-      || inputData.title.value === "" || inputData.start_time_hh.value === "" || inputData.start_time_mm.value === "" || inputData.end_time_hh.value === "" || inputData.end_time_mm.value === "")
-    return true
-  }
+    if (
+      inputData.title.error === true ||
+      inputData.start_time_hh.error === true ||
+      inputData.start_time_mm.error === true ||
+      inputData.end_time_hh.error === true ||
+      inputData.end_time_mm.error === true ||
+      inputData.start_time_hh.value === "" ||
+      inputData.start_time_mm.value === "" ||
+      inputData.end_time_hh.value === "" ||
+      inputData.end_time_mm.value === ""
+    ) {
+      return true;
+    }
+    if (inputData.title.value.length < 3) {
+      const newInputData = { ...inputData };
+      newInputData.title.error = !newInputData.title.error;
+      setInputData(...newInputData);
+    }
+  };
   const handleRowSave = () => {
-    if(checkError()) return
+    if (checkError()) return;
     const newData = { ...data };
+    const col_2 = [...newData.column_2]
     const formattedDate = formatDate();
     const index = findStartTimeIndex(formattedDate);
 
     if (index === -1) {
-      newData.column_2.push(formattedDate);
+      col_2.push(formattedDate)
+      newData.column_2 = col_2
       setData(newData);
     } else {
-      newData.column_2.splice(index, 0, formattedDate);
+      col_2.splice(index, 0, formattedDate);
+      newData.column_2 = col_2
       setData(newData);
     }
 
@@ -79,7 +97,12 @@ const EditAddRow = (props) => {
 
   const handleInput = (event, anchor) => {
     const re = /^[0-9\b]+$/;
-    if (anchor === "title" && event.target.value !== "" ) {
+    const allowedTitle = /^["  *"A-ZÅÄÖa-zåäö0-9]+$/;
+    if (
+      anchor === "title" &&
+      event.target.value !== "" &&
+      allowedTitle.test(event.target.value)
+    ) {
       setInputData({
         ...inputData,
         [anchor]: {
@@ -88,8 +111,21 @@ const EditAddRow = (props) => {
         },
       });
     } else if (
-      (event.target.value === "" && anchor !== "title") ||
-      re.test(event.target.value)
+      (event.target.value === "" && anchor === "start_time_hh") ||
+      anchor === "end_time_hh" ||
+      (re.test(event.target.value) && event.target.value <= 23)
+    ) {
+      setInputData({
+        ...inputData,
+        [anchor]: {
+          value: event.target.value,
+          error: false,
+        },
+      });
+    } else if (
+      (event.target.value === "" && anchor === "start_time_mm") ||
+      anchor === "end_time_mm" ||
+      (re.test(event.target.value) && event.target.value <= 59)
     ) {
       setInputData({
         ...inputData,
@@ -116,10 +152,11 @@ const EditAddRow = (props) => {
           <div className="titleContainer">
             <label>Title</label>
             <input
-  
+              className={inputData.title.error ? "startTimeMm" : null}
               onChange={(e) => handleInput(e, "title")}
               type="text"
               name="title"
+              maxLength="10"
             />
           </div>
           <div className="startEndContainer">
@@ -128,7 +165,9 @@ const EditAddRow = (props) => {
               <div className="dateInputContainer">
                 <div>
                   <input
-                    className={inputData.start_time_hh.error ? "startTimeMm" : null}
+                    className={
+                      inputData.start_time_hh.error ? "startTimeMm" : null
+                    }
                     onChange={(e) => handleInput(e, "start_time_hh")}
                     type="text"
                     name="start"
@@ -139,7 +178,9 @@ const EditAddRow = (props) => {
                 </div>
                 <div>
                   <input
-                    className={inputData.start_time_mm.error ? "startTimeHh" : null}
+                    className={
+                      inputData.start_time_mm.error ? "startTimeHh" : null
+                    }
                     onChange={(e) => handleInput(e, "start_time_mm")}
                     type="text"
                     name="start"
@@ -178,10 +219,9 @@ const EditAddRow = (props) => {
               </div>
             </div>
           </div>
-          
-          
+
           <div className="modalButtonContainer">
-          {checkError() && <p>Please fill in the form</p>}
+            {checkError() && <p>Please fill in the form</p>}
             <button type="button" onClick={() => handleRowSave()}>
               Save
             </button>
