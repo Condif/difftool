@@ -105,9 +105,13 @@ td > div > p {
   background: white !important;
 }
 
-.mode_edit:hover, .delete:hover {
+.mode_edit:hover, .delete:hover, .checkMarkApproved:hover {
   cursor: pointer;
   background-color: rgb(177, 177, 177);
+}
+
+.checkMarkApproved {
+  background-color: rgba(0, 128, 0, 0.349);
 }
 
 .upwardArrowDiv {

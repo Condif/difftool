@@ -72,6 +72,7 @@ const EditAddRow = (props) => {
       title: inputData.title.value,
       start_time: startTime,
       end_time: endTime,
+      approved: false,
     };
     return formattedDate;
   };

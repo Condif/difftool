@@ -7,7 +7,6 @@ import ViewDiffs from "../modals/ViewDiffs";
 const Ui = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState("");
-  // const [dataErrorIndexes, setDataErrorIndexes] = useState([]);
 
   useEffect(() => {
     setData(dataToDiff);
@@ -47,7 +46,8 @@ const Ui = () => {
                       <p
                         className={
                           data.column_2[index]?.title.toString() !==
-                          data.column_1[index]?.title.toString()
+                            data.column_1[index]?.title.toString() &&
+                          !data.column_2[index]?.approved
                             ? "mark"
                             : null
                         }
@@ -65,13 +65,11 @@ const Ui = () => {
                     //time1 - time2
                     data.column_2[index].end_time,
                     data.column_2[index + 1].start_time
-                  ) > 1
-                    ?  (
-                        <span className="material-icons arrow_upward">
-                          arrow_upward
-                        </span>
-                      )
-                    : null}
+                  ) > 1 ? (
+                    <span className="material-icons arrow_upward">
+                      arrow_upward
+                    </span>
+                  ) : null}
                 </div>
                 <div className="innerDiv">
                   {data.column_1[index] ? (
@@ -80,7 +78,7 @@ const Ui = () => {
                         compareTimes(
                           data.column_1[index].start_time,
                           data.column_2[index].start_time
-                        ) > 1
+                        ) > 1 && !data.column_2[index]?.approved
                           ? "lessThanOneMinute"
                           : null
                       }
@@ -99,7 +97,7 @@ const Ui = () => {
                         compareTimes(
                           data.column_1[index].end_time,
                           data.column_2[index].end_time
-                        ) > 1
+                        ) > 1 && !data.column_2[index]?.approved
                           ? "lessThanOneMinute"
                           : null
                       }
@@ -120,7 +118,7 @@ const Ui = () => {
                     {compareTimes(
                       data.column_2[index].end_time,
                       data.column_2[index].start_time
-                    ) < 5 && (
+                    ) < 5 && !data.column_2[index]?.approved && (
                       <span className="material-icons arrow_forward">
                         arrow_forward
                       </span>
@@ -157,6 +155,15 @@ const Ui = () => {
                       delete
                     </span>
                   </div>
+                  <div className="editContainer">
+                    <span
+                      type="button"
+                      onClick={() => handleSetApproved(index)}
+                      className={data.column_2[index]?.approved ? "material-icons checkMarkApproved" : "material-icons delete"}
+                    >
+                      check
+                    </span>
+                  </div>
                 </div>
               </div>
             </td>
@@ -167,7 +174,19 @@ const Ui = () => {
       );
     });
   };
+  const handleSetApproved = (index) => {
+    const newData = {...data };
+    let column_2 = []
+    newData.column_2.forEach(element => {
+      column_2.push(element)
+    });
+    const approvedEpisode = {...column_2[index]}
+    approvedEpisode.approved = !approvedEpisode.approved
 
+    column_2[index] = approvedEpisode
+    newData.column_2 = column_2
+    setData(newData);
+  };
   const convertDateToHourMinute = (time) => {
     if (!time) return;
     const date = new Date(time);
@@ -205,7 +224,15 @@ const Ui = () => {
           setData={setData}
         />
       )}
-      {isOpen === "view_diffs" && <ViewDiffs setIsOpen={setIsOpen} columnToRender={columnToRender} data={data} compareTimes={compareTimes} convertDateToHourMinute={convertDateToHourMinute} />}
+      {isOpen === "view_diffs" && (
+        <ViewDiffs
+          setIsOpen={setIsOpen}
+          columnToRender={columnToRender}
+          data={data}
+          compareTimes={compareTimes}
+          convertDateToHourMinute={convertDateToHourMinute}
+        />
+      )}
       <h3>{data.title}</h3>
       <div className="uiTopBar">
         <h4>{data.date}</h4>
