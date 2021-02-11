@@ -31,7 +31,7 @@ const EditAddRow = (props) => {
     return true
   }
   const handleRowSave = () => {
-    if(checkError()) return alert("Errors in form")
+    if(checkError()) return
     const newData = { ...data };
     const formattedDate = formatDate();
     const index = findStartTimeIndex(formattedDate);
@@ -177,7 +177,10 @@ const EditAddRow = (props) => {
               </div>
             </div>
           </div>
+          
+          
           <div className="modalButtonContainer">
+          {checkError() && <p>Please fill in the form</p>}
             <button type="button" onClick={() => handleRowSave()}>
               Save
             </button>

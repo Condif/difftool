@@ -177,14 +177,6 @@ const Ui = () => {
     });
   };
 
-  // const handleSetDataErrorIndexes = (index) => {
-  //   console.log(dataErrorIndexes);
-  //   const newIndexList = dataErrorIndexes;
-  //   console.log(newIndexList);
-  //   newIndexList.push(index);
-  //   setDataErrorIndexes(newIndexList);
-  // };
-
   const compareTimes = (time1, time2) => {
     if (!time1 || !time2) return;
     const diff = (new Date(time1) - new Date(time2)) / 1000 / 60;

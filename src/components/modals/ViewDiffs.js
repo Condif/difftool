@@ -107,7 +107,7 @@ const ViewDiffs = (props) => {
               {compareTimes(
                 //time1 - time2
                 data.column_2[index].end_time,
-                data.column_2[index + 1].start_time
+                data.column_2[index + 1]?.start_time
               ) > 0 && (
                 <div className="notMatchingTextContainer">
                   <p>Start time is prior to previous end time:</p>
