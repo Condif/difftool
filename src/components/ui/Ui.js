@@ -34,9 +34,6 @@ const Ui = () => {
   useEffect(() => {
     setData(dataToDiff);
   }, []);
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const columnToRender = () => {
     if (data.column_1.length >= data.column_2.length) {
@@ -224,23 +221,11 @@ const Ui = () => {
     const endTimeMin = convertDateToMin(data.column_2[index]?.end_time);
 
     const input = { ...inputData };
-    console.log(input);
-    const t = { ...input.title };
-    console.log(t);
-    t.value = title;
-    const sth = { ...input.start_time_hh };
-    sth.value = startTimeH;
-    const stm = { ...input.start_time_mm };
-    stm.value = startTimeMin;
-    const eth = { ...input.end_time_hh };
-    eth.value = endTimeH;
-    const etm = { ...input.end_time_mm };
-    etm.value = endTimeMin;
-    input.title = t;
-    input.start_time_hh = sth;
-    input.start_time_mm = stm;
-    input.end_time_hh = eth;
-    input.end_time_mm = etm;
+    input.title.value = title;
+    input.start_time_hh.value = startTimeH;
+    input.start_time_mm.value = startTimeMin;
+    input.end_time_hh.value = endTimeH;
+    input.end_time_mm.value = endTimeMin;
 
     setInputData(input);
     setCurrentRowIndex(index);
@@ -279,8 +264,6 @@ const Ui = () => {
     // objekt i den arrayen utan man måste skapa en kopia som man pushar till eftersom den har en referens till originella data i state.
     // Skapa därför variabel och använda spread på listan så du kan ändra i kopian av listan eftersom värdena i listan annars ligger i statet.
     //spread operator does not do a deep copy if I am correct and will lead to state mutations with NESTED objects in React.
-    console.log(index);
-    console.log(data);
     const newData = { ...data };
     const col_2 = [...newData.column_2];
 
