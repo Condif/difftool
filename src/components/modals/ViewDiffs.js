@@ -63,8 +63,8 @@ const ViewDiffs = (props) => {
               )}
               {compareTimes(
                 //time1 - time2
-                data.column_1[index].start_time,
-                data.column_2[index].start_time
+                data.column_1[index]?.start_time,
+                data.column_2[index]?.start_time
               ) > 1 && (
                 <div className="notMatchingTextContainer">
                   <p>Start time differs more than 1min:</p>
@@ -84,8 +84,8 @@ const ViewDiffs = (props) => {
               )}
               {compareTimes(
                 //time1 - time2
-                data.column_1[index].end_time,
-                data.column_2[index].end_time
+                data.column_1[index]?.end_time,
+                data.column_2[index]?.end_time
               ) > 1 && (
                 <div className="notMatchingTextContainer">
                   <p>End time differs more than 1min:</p>

@@ -7,10 +7,36 @@ import ViewDiffs from "../modals/ViewDiffs";
 const Ui = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState("");
+  const [currentRowIndex, setCurrentRowIndex] = useState("");
+  const [inputData, setInputData] = useState({
+    title: {
+      value: "",
+      error: false,
+    },
+    start_time_hh: {
+      value: "",
+      error: false,
+    },
+    start_time_mm: {
+      value: "",
+      error: false,
+    },
+    end_time_hh: {
+      value: "",
+      error: false,
+    },
+    end_time_mm: {
+      value: "",
+      error: false,
+    },
+  });
 
   useEffect(() => {
     setData(dataToDiff);
   }, []);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const columnToRender = () => {
     if (data.column_1.length >= data.column_2.length) {
@@ -118,11 +144,12 @@ const Ui = () => {
                     {compareTimes(
                       data.column_2[index].end_time,
                       data.column_2[index].start_time
-                    ) < 5 && !data.column_2[index]?.approved && (
-                      <span className="material-icons arrow_forward">
-                        arrow_forward
-                      </span>
-                    )}
+                    ) < 5 &&
+                      !data.column_2[index]?.approved && (
+                        <span className="material-icons arrow_forward">
+                          arrow_forward
+                        </span>
+                      )}
                   </div>
                   <div className="arrowForwardDownwardDiv">
                     {compareTimes(
@@ -140,7 +167,7 @@ const Ui = () => {
                   <div className="editContainer">
                     <span
                       type="button"
-                      onClick={() => setIsOpen("edit_add_row")}
+                      onClick={() => handleEditRow("edit_row", index)}
                       className="material-icons mode_edit"
                     >
                       mode_edit
@@ -159,7 +186,11 @@ const Ui = () => {
                     <span
                       type="button"
                       onClick={() => handleSetApproved(index)}
-                      className={data.column_2[index]?.approved ? "material-icons checkMarkApproved" : "material-icons delete"}
+                      className={
+                        data.column_2[index]?.approved
+                          ? "material-icons checkMarkApproved"
+                          : "material-icons delete"
+                      }
                     >
                       check
                     </span>
@@ -174,17 +205,58 @@ const Ui = () => {
       );
     });
   };
-  const handleSetApproved = (index) => {
-    const newData = {...data };
-    let column_2 = []
-    newData.column_2.forEach(element => {
-      column_2.push(element)
-    });
-    const approvedEpisode = {...column_2[index]}
-    approvedEpisode.approved = !approvedEpisode.approved
+  const convertDateToHours = (time) => {
+    const date = new Date(time);
+    const h = date.getHours();
+    return h;
+  };
+  const convertDateToMin = (time) => {
+    const date = new Date(time);
+    const min = date.getMinutes();
+    return min;
+  };
 
-    column_2[index] = approvedEpisode
-    newData.column_2 = column_2
+  const handleEditRow = (anchor, index) => {
+    const title = data.column_2[index]?.title;
+    const startTimeH = convertDateToHours(data.column_2[index]?.start_time);
+    const startTimeMin = convertDateToMin(data.column_2[index]?.start_time);
+    const endTimeH = convertDateToHours(data.column_2[index]?.end_time);
+    const endTimeMin = convertDateToMin(data.column_2[index]?.end_time);
+
+    const input = { ...inputData };
+    console.log(input);
+    const t = { ...input.title };
+    console.log(t);
+    t.value = title;
+    const sth = { ...input.start_time_hh };
+    sth.value = startTimeH;
+    const stm = { ...input.start_time_mm };
+    stm.value = startTimeMin;
+    const eth = { ...input.end_time_hh };
+    eth.value = endTimeH;
+    const etm = { ...input.end_time_mm };
+    etm.value = endTimeMin;
+    input.title = t;
+    input.start_time_hh = sth;
+    input.start_time_mm = stm;
+    input.end_time_hh = eth;
+    input.end_time_mm = etm;
+
+    setInputData(input);
+    setCurrentRowIndex(index);
+    setIsOpen(anchor);
+  };
+  const handleSetApproved = (index) => {
+    const newData = { ...data };
+    let column_2 = [];
+    newData.column_2.forEach((element) => {
+      column_2.push(element);
+    });
+    const approvedEpisode = { ...column_2[index] };
+    approvedEpisode.approved = !approvedEpisode.approved;
+
+    column_2[index] = approvedEpisode;
+    newData.column_2 = column_2;
     setData(newData);
   };
   const convertDateToHourMinute = (time) => {
@@ -203,28 +275,36 @@ const Ui = () => {
   };
 
   const deleteRow = (index) => {
-    //Även om newData är en kopia av data får man inte pusha till nestat 
+    //Även om newData är en kopia av data får man inte pusha till nestat
     // objekt i den arrayen utan man måste skapa en kopia som man pushar till eftersom den har en referens till originella data i state.
+    // Skapa därför variabel och använda spread på listan så du kan ändra i kopian av listan eftersom värdena i listan annars ligger i statet.
+    //spread operator does not do a deep copy if I am correct and will lead to state mutations with NESTED objects in React.
+    console.log(index);
+    console.log(data);
     const newData = { ...data };
-    const col_2 = [...newData.column_2]
+    const col_2 = [...newData.column_2];
 
     col_2.splice(index, 1);
-    newData.column_2 = col_2
+    newData.column_2 = col_2;
     setData(newData);
   };
 
   const discard = () => {
-    setData(dataToDiff)
+    setData(dataToDiff);
   };
 
   return (
     <div className="Ui">
-      {isOpen === "edit_add_row" && (
+      {(isOpen === "edit_row" || isOpen === "add_row") && (
         <EditAddRow
           compareTimes={compareTimes}
           data={data}
           setIsOpen={setIsOpen}
           setData={setData}
+          inputData={inputData}
+          setInputData={setInputData}
+          isOpen={isOpen}
+          currentRowIndex={currentRowIndex}
         />
       )}
       {isOpen === "view_diffs" && (
@@ -248,7 +328,7 @@ const Ui = () => {
         {data.length !== 0 && <tbody>{renderTable()}</tbody>}
       </table>
       <div className="uiBottomBar">
-        <button onClick={() => setIsOpen("edit_add_row")}>Add row +</button>
+        <button onClick={() => setIsOpen("add_row")}>Add row +</button>
       </div>
     </div>
   );

@@ -2,29 +2,17 @@ import React, { useState } from "react";
 import "./Modals.css";
 
 const EditAddRow = (props) => {
-  const { setIsOpen, setData, data, compareTimes } = props;
-  const [inputData, setInputData] = useState({
-    title: {
-      value: "",
-      error: false,
-    },
-    start_time_hh: {
-      value: "",
-      error: false,
-    },
-    start_time_mm: {
-      value: "",
-      error: false,
-    },
-    end_time_hh: {
-      value: "",
-      error: false,
-    },
-    end_time_mm: {
-      value: "",
-      error: false,
-    },
-  });
+  const {
+    setIsOpen,
+    isOpen,
+    setData,
+    data,
+    compareTimes,
+    inputData,
+    setInputData,
+    currentRowIndex,
+  } = props;
+
   const checkError = () => {
     if (
       inputData.title.error === true ||
@@ -47,22 +35,28 @@ const EditAddRow = (props) => {
   };
   const handleRowSave = () => {
     if (checkError()) return;
+
     const newData = { ...data };
-    const col_2 = [...newData.column_2]
+    const col_2 = [...newData.column_2];
     const formattedDate = formatDate();
     const index = findStartTimeIndex(formattedDate);
-
-    if (index === -1) {
-      col_2.push(formattedDate)
-      newData.column_2 = col_2
+    if (isOpen === "edit_row") {
+      col_2.splice(index, 0, formattedDate);
+      col_2.splice(currentRowIndex, 1);
+      newData.column_2 = col_2;
       setData(newData);
     } else {
-      col_2.splice(index, 0, formattedDate);
-      newData.column_2 = col_2
-      setData(newData);
+      if (index === -1) {
+        col_2.push(formattedDate);
+        newData.column_2 = col_2;
+        setData(newData);
+      } else {
+        col_2.splice(index, 0, formattedDate);
+        newData.column_2 = col_2;
+        setData(newData);
+      }
     }
-
-    setIsOpen("");
+    handleCloseModal()
   };
 
   const findStartTimeIndex = (formattedDate) => {
@@ -145,6 +139,17 @@ const EditAddRow = (props) => {
     }
   };
 
+  const handleCloseModal = () => {
+    const emptyInput = { ...inputData };
+    emptyInput.title.value = "";
+    emptyInput.start_time_hh.value = "";
+    emptyInput.start_time_mm.value = "";
+    emptyInput.end_time_hh.value = "";
+    emptyInput.end_time_mm.value = "";
+    setInputData(emptyInput);
+    setIsOpen("");
+  };
+
   return (
     <div className="EditAddRow">
       <div className="modalContent">
@@ -157,6 +162,7 @@ const EditAddRow = (props) => {
               type="text"
               name="title"
               maxLength="10"
+              value={inputData.title.value}
             />
           </div>
           <div className="startEndContainer">
@@ -172,7 +178,7 @@ const EditAddRow = (props) => {
                     type="text"
                     name="start"
                     maxLength="2"
-                    minLength="1"
+                    value={inputData.start_time_hh.value}
                   />
                   <p>HH</p>
                 </div>
@@ -185,7 +191,7 @@ const EditAddRow = (props) => {
                     type="text"
                     name="start"
                     maxLength="2"
-                    minLength="1"
+                    value={inputData.start_time_mm.value}
                   />
                   <p>MM</p>
                 </div>
@@ -201,7 +207,7 @@ const EditAddRow = (props) => {
                     type="text"
                     name="end"
                     maxLength="2"
-                    minLength="1"
+                    value={inputData.end_time_hh.value}
                   />
                   <p>HH</p>
                 </div>
@@ -212,7 +218,7 @@ const EditAddRow = (props) => {
                     type="text"
                     name="end"
                     maxLength="2"
-                    minLength="1"
+                    value={inputData.end_time_mm.value}
                   />
                   <p>MM</p>
                 </div>
@@ -222,13 +228,13 @@ const EditAddRow = (props) => {
 
           <div className="modalButtonContainer">
             {checkError() && <p>Please fill in the form</p>}
-            <button type="button" onClick={() => handleRowSave()}>
-              Save
-            </button>
+              <button type="button" onClick={() => handleRowSave()}>
+                Save
+              </button>
           </div>
         </form>
         <div className="closeModal">
-          <button onClick={() => setIsOpen("")}>x</button>
+          <button onClick={() => handleCloseModal()}>x</button>
         </div>
       </div>
     </div>
